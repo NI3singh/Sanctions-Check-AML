@@ -1,0 +1,298 @@
+COMPLETE FILE STRUCTURE FOR SANCTIONS SCREENING API
+=======================================================
+
+ROOT DIRECTORY: C:\SANCTIONS-CHECK\
+│
+├─ api\                                 [NEW - Create this directory]
+│  │
+│  ├─ main.py                          [FastAPI application entry point]
+│  ├─ config.py                        [Configuration management]
+│  ├─ models.py                        [Pydantic request/response models]
+│  ├─ requirements.txt                 [Python dependencies]
+│  ├─ .env.example                     [Environment variables template]
+│  ├─ .env                             [OPTIONAL - Your actual config]
+│  ├─ README.md                        [Complete documentation]
+│  ├─ QUICKSTART.md                    [Quick setup guide]
+│  ├─ FILE_STRUCTURE.txt              [This file]
+│  ├─ test_api.py                      [Test script]
+│  │
+│  ├─ services\                        [Business logic services]
+│  │  ├─ __init__.py                   [Package init]
+│  │  ├─ yente_client.py               [Yente API client]
+│  │  └─ decision_engine.py            [Decision logic engine]
+│  │
+│  ├─ utils\                           [Utility functions]
+│  │  ├─ __init__.py                   [Package init]
+│  │  └─ audit_logger.py               [Audit logging system]
+│  │
+│  └─ venv\                            [Python virtual environment - created by you]
+│     └─ ... (do not commit to git)
+│
+├─ logs\                               [Existing]
+│  ├─ api\                             [NEW - Auto-created by API]
+│  │  └─ audit\                        [Audit trail logs]
+│  │     └─ screening_YYYYMMDD.log     [Daily log files]
+│  │
+│  ├─ elasticsearch\                   [Existing]
+│  │  └─ ...
+│  │
+│  └─ yente\                           [Existing]
+│     └─ ...
+│
+├─ Current_Status.md                   [Existing - Your documentation]
+├─ es_unlock.json                      [Existing]
+├─ future_plan.md                      [Existing - Your planning doc]
+├─ index.json                          [Existing - OpenSanctions catalog]
+├─ manifest.yml                        [Existing - Yente configuration]
+├─ openapi.json                        [Existing - Yente API spec]
+└─ q.json                              [Existing]
+
+
+DATA DIRECTORY: D:\Sanctions-data\
+│
+├─ datasets\
+│  └─ raw\
+│     ├─ ofac\                         [OFAC data - referenced in config]
+│     └─ un\                           [UN data - referenced in config]
+│
+└─ elasticsearch\
+   └─ data\                            [Elasticsearch index data]
+
+
+DOCKER CONTAINERS (Already Running)
+=====================================
+1. Elasticsearch
+   - Port: 9200
+   - Internal name: sanctions-es
+   - Network: sanctions-net
+
+2. Yente
+   - Port: 5000 (host) → 8000 (container)
+   - Internal name: yente
+   - Network: sanctions-net
+
+
+SETUP CHECKLIST
+=====================================
+
+STEP 1: Create Directory Structure
+-----------------------------------
+cd C:\SANCTIONS-CHECK
+mkdir api
+cd api
+mkdir services
+mkdir utils
+
+STEP 2: Copy Files to Correct Locations
+-----------------------------------
+Copy these 12 files to C:\SANCTIONS-CHECK\api\:
+
+Core Application Files:
+├─ main.py
+├─ config.py
+├─ models.py
+├─ requirements.txt
+
+Documentation Files:
+├─ README.md
+├─ QUICKSTART.md
+├─ FILE_STRUCTURE.txt
+
+Configuration Files:
+├─ .env.example
+
+Test Files:
+└─ test_api.py
+
+Services Package (in api\services\):
+├─ __init__.py
+├─ yente_client.py
+└─ decision_engine.py
+
+Utils Package (in api\utils\):
+├─ __init__.py
+└─ audit_logger.py
+
+STEP 3: Create Virtual Environment
+-----------------------------------
+cd C:\SANCTIONS-CHECK\api
+python -m venv venv
+
+STEP 4: Activate Virtual Environment
+-----------------------------------
+# Windows CMD
+venv\Scripts\activate.bat
+
+# Windows PowerShell
+venv\Scripts\Activate.ps1
+
+STEP 5: Install Dependencies
+-----------------------------------
+pip install -r requirements.txt
+
+STEP 6: Verify Existing Services
+-----------------------------------
+# Check Elasticsearch
+curl http://127.0.0.1:9200/_cluster/health
+
+# Check Yente
+curl http://127.0.0.1:5000/readyz
+
+STEP 7: Start API
+-----------------------------------
+python main.py
+
+STEP 8: Test API (in new terminal)
+-----------------------------------
+# Activate venv in new terminal first
+cd C:\SANCTIONS-CHECK\api
+venv\Scripts\activate
+
+# Run tests
+python test_api.py
+
+# Or test manually
+curl http://localhost:8080/health
+
+
+FILE SIZES (Approximate)
+=====================================
+main.py             ~10 KB
+config.py           ~3 KB
+models.py           ~5 KB
+requirements.txt    ~1 KB
+README.md           ~20 KB
+QUICKSTART.md       ~10 KB
+test_api.py         ~12 KB
+yente_client.py     ~10 KB
+decision_engine.py  ~8 KB
+audit_logger.py     ~6 KB
+__init__.py         ~0.2 KB (×2)
+
+
+CONFIGURATION FILES PRIORITY
+=====================================
+1. .env (if exists) - highest priority
+2. Environment variables
+3. config.py defaults - lowest priority
+
+You can configure the API by:
+- Creating .env from .env.example
+- Setting environment variables
+- Editing defaults in config.py
+
+
+IMPORTANT PATHS IN CODE
+=====================================
+These paths are referenced in the code:
+
+config.py:
+----------
+YENTE_BASE_URL = "http://127.0.0.1:5000"
+LOG_BASE_DIR = "C:\\SANCTIONS-CHECK\\logs\\api"
+DATA_BASE_DIR = "D:\\Sanctions-data"
+OFAC_DATA_PATH = "D:\\Sanctions-data\\datasets\\raw\\ofac"
+UN_DATA_PATH = "D:\\Sanctions-data\\datasets\\raw\\un"
+
+If your paths are different, update these in:
+- config.py (defaults)
+- .env (overrides)
+
+
+GENERATED FILES (Don't Create Manually)
+=====================================
+These files are auto-generated by the API:
+
+C:\SANCTIONS-CHECK\logs\api\audit\screening_YYYYMMDD.log
+- Created automatically when API starts
+- One file per day
+- JSON lines format
+- Rotates based on LOG_RETENTION_DAYS setting
+
+
+OPTIONAL FILES
+=====================================
+.env - Your custom configuration (copy from .env.example)
+.gitignore - If using git (add venv/, .env, *.log)
+
+
+VERIFICATION COMMANDS
+=====================================
+After setup, verify each component:
+
+# 1. Directory structure
+dir C:\SANCTIONS-CHECK\api
+dir C:\SANCTIONS-CHECK\api\services
+dir C:\SANCTIONS-CHECK\api\utils
+
+# 2. Python files exist
+dir C:\SANCTIONS-CHECK\api\*.py
+
+# 3. Virtual environment
+dir C:\SANCTIONS-CHECK\api\venv\Scripts
+
+# 4. Dependencies installed
+pip list | findstr fastapi
+
+# 5. Can import modules
+python -c "from config import settings; print(settings.API_TITLE)"
+
+# 6. Services running
+curl http://127.0.0.1:9200/_cluster/health
+curl http://127.0.0.1:5000/readyz
+
+# 7. API running
+curl http://localhost:8080/health
+
+
+TROUBLESHOOTING PATHS
+=====================================
+If you get "module not found" errors:
+
+1. Verify you're in the right directory:
+   cd C:\SANCTIONS-CHECK\api
+
+2. Verify virtual environment is activated:
+   # Should see (venv) in prompt
+   
+3. Verify all files exist:
+   dir /s /b *.py
+   # Should list all Python files
+
+4. Verify __init__.py files exist:
+   dir services\__init__.py
+   dir utils\__init__.py
+
+5. Try absolute imports if needed:
+   # Instead of: from config import settings
+   # Use: from api.config import settings
+
+
+FINAL DIRECTORY TREE
+=====================================
+C:\SANCTIONS-CHECK\
+├─ api\
+│  ├─ main.py
+│  ├─ config.py
+│  ├─ models.py
+│  ├─ requirements.txt
+│  ├─ .env.example
+│  ├─ README.md
+│  ├─ QUICKSTART.md
+│  ├─ FILE_STRUCTURE.txt
+│  ├─ test_api.py
+│  ├─ services\
+│  │  ├─ __init__.py
+│  │  ├─ yente_client.py
+│  │  └─ decision_engine.py
+│  ├─ utils\
+│  │  ├─ __init__.py
+│  │  └─ audit_logger.py
+│  └─ venv\
+│     └─ (virtual environment files)
+└─ logs\
+   └─ api\
+      └─ audit\
+         └─ screening_*.log
+
+Ready to run: python main.py

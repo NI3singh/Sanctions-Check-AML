@@ -1,0 +1,16 @@
+# FastAPI and ASGI server
+fastapi==0.115.6
+uvicorn[standard]==0.30.6
+
+# HTTP client for Yente API
+httpx==0.27.2
+
+# Data validation and settings
+pydantic==2.10.5
+pydantic-settings==2.7.0
+
+# Environment configuration
+python-dotenv==1.0.1
+
+# Logging (included in Python but explicit for clarity)
+# logging is part of Python standard library

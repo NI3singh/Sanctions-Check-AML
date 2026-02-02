@@ -1,0 +1,6 @@
+﻿catalogs:
+  - url: https://data.opensanctions.org/datasets/latest/index.json
+    resource_name: entities.ftm.json
+    scopes:
+      - us_ofac_sdn
+      - un_sc_sanctions
